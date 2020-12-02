@@ -31,7 +31,30 @@ const con = new Conexao();
          
     }
 
-    
+    async Create_User(cpf,senha,email,nascimento,nome,telefone,celular){
+
+      const text = "insert into usuario(cpf,senha,email,nascimento,nome,celular2,celular)values($1,$2,$3,$4,$5,$6,$7)"
+      const values = [cpf,senha,email,nascimento,nome,telefone,celular] 
+      const client = await con.Open(text,values)  
+
+      if(!client){
+          return erros.Client;
+        }
+      
+        const valor = await client
+        .query(text,values)
+        .then(token => {return token})    
+        .catch(e => console.error("Não foi possivel" + e.stack))
+        .finally(() => con.End(client))           
+       
+        return new Promise(function(resolve,reject){
+          setTimeout(function(){
+          
+           resolve(valor)
+           reject("Erro na promisse login");
+          },1000)
+   });
+  }
     
   }  
  
